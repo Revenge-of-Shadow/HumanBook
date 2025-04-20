@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 
 
 class Entry:
@@ -10,28 +10,36 @@ class Entry:
         self.street = street
 
     def getStr(self):
-        return self.name+" | "+self.surname+" | "+self.telephone+" | "+self.city+" | "+self.street
+        return self.name+"  |  "+self.surname+"  |  "+self.telephone+"  |  "+self.city+"  |  "+self.street
+
+
+def create_widget(parent, widget_type, **options):
+    return widget_type(parent, **options)
 
 
 
-root = Tk()
+root = create_widget(None, tk.Tk)
 root.geometry('600x400')
 root.title("")
 
+frame = create_widget(root, tk.Frame, width = 580)
+frame.pack()
+l_search = create_widget(frame, tk.Label, text = "Search:")
+l_search.pack(side = tk.LEFT)
 
-a = Label(root, text = "Text.")
-a.pack()
+b_add = create_widget(root, tk.Button, text = "Add", width = 580)
+b_add.pack()
 
-scroll_bar = Scrollbar(root)
-scroll_bar.pack(side=RIGHT, fill = Y)
+scroll_bar = create_widget(root, tk.Scrollbar)
+scroll_bar.pack(side=tk.RIGHT, fill = tk.Y)
 
-mylist = Listbox(root, yscrollcommand=scroll_bar.set, width = 580, bg="lightgrey")
+mylist = create_widget(root, tk.Listbox, yscrollcommand=scroll_bar.set, width = 580, bg="lightgrey", font = "20")
 
 one = Entry("A", "B", "1", "C", "D")
-mylist.insert(END, one.getStr()) 
+mylist.insert(tk.END, one.getStr()) 
 
 
-mylist.pack(side = LEFT, fill = BOTH)
+mylist.pack(side = tk.LEFT, fill = tk.BOTH)
 
 scroll_bar.config(command = mylist.yview)
 
