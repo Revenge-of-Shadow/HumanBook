@@ -12,10 +12,13 @@ class Entry:
     def getStr(self):
         return self.name+"  |  "+self.surname+"  |  "+self.telephone+"  |  "+self.city+"  |  "+self.street
 
-
+search_var = ""
 def create_widget(parent, widget_type, **options):
     return widget_type(parent, **options)
 
+
+def search():
+    print(search_var)
 
 
 root = create_widget(None, tk.Tk)
@@ -23,9 +26,14 @@ root.geometry('600x400')
 root.title("")
 
 frame = create_widget(root, tk.Frame, width = 580)
-frame.pack()
-l_search = create_widget(frame, tk.Label, text = "Search:")
+
+e_search = create_widget(frame, tk.Entry,textvariable=search_var)
+e_search.pack(side = tk.LEFT)
+
+l_search = create_widget(frame, tk.Button, text = "Search", command = search)
 l_search.pack(side = tk.LEFT)
+
+frame.pack()
 
 b_add = create_widget(root, tk.Button, text = "Add", width = 580)
 b_add.pack()
