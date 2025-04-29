@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import *
 
 
 class Entry:
@@ -12,13 +13,10 @@ class Entry:
     def getStr(self):
         return self.name+"  |  "+self.surname+"  |  "+self.telephone+"  |  "+self.city+"  |  "+self.street
 
-search_var = ""
+
 def create_widget(parent, widget_type, **options):
     return widget_type(parent, **options)
 
-
-def search():
-    print(search_var)
 
 
 entries = [
@@ -32,6 +30,14 @@ root.geometry('600x400')
 root.title("")
 
 frame = create_widget(root, tk.Frame, width = 580)
+
+
+search_var = StringVar()
+
+def search(*args):
+    print(search_var.get())
+
+
 
 e_search = create_widget(frame, tk.Entry,textvariable=search_var)
 e_search.pack(side = tk.LEFT)
