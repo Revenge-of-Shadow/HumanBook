@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import *
+from tkinter import ttk
 
 
 class Entry:
@@ -25,27 +25,38 @@ entries = [
 ]
 
 
+# Window initialization
 root = create_widget(None, tk.Tk)
 root.geometry('600x400')
 root.title("")
 
+#Window objects
+## Search block
 frame = create_widget(root, tk.Frame, width = 580)
 
 
-search_var = StringVar()
+search_var = tk.StringVar()
 
 def search(*args):
     print(search_var.get())
 
-
-
-e_search = create_widget(frame, tk.Entry,textvariable=search_var)
+e_search = create_widget(frame, tk.Entry, textvariable=search_var, width = 40)
 e_search.pack(side = tk.LEFT)
 
-l_search = create_widget(frame, tk.Button, text = "Search", command = search)
-l_search.pack(side = tk.LEFT)
+b_search = create_widget(frame, tk.Button, text = "Search", command = search)
+b_search.pack(side = tk.LEFT)
+
+l_by = create_widget(frame, tk.Label, text = "by:", font = "20")
+l_by.pack(side = tk.LEFT)
+
+combo_var = tk.StringVar()
+cb_search = create_widget(frame, ttk.Combobox, textvariable = combo_var, width = 40)
+cb_search['values'] = ("name", "surname", "telephone", "city", "street")
+cb_search.current(0)
+cb_search.pack(side = tk.LEFT, expand = True)
 
 frame.pack()
+## Search block end
 
 b_add = create_widget(root, tk.Button, text = "Add", width = 580)
 b_add.pack()
