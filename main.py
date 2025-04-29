@@ -25,6 +25,49 @@ entries = [
 ]
 
 
+def update_list(search_by, search_word):
+ 
+    for child in mylist.winfo_children():
+        child.destroy()
+
+    l_na= create_widget(mylist, tk.Label, text = "Name", font = "20")
+    l_su= create_widget(mylist, tk.Label, text = "Surname", font = "20")
+    l_nu= create_widget(mylist, tk.Label, text = "Number", font = "20")
+    l_ci= create_widget(mylist, tk.Label, text = "City", font = "20")
+    l_st= create_widget(mylist, tk.Label, text = "Street", font = "20")
+    l_na.grid(row = 0, column = 0) 
+    l_su.grid(row = 0, column = 1)
+    l_nu.grid(row = 0, column = 2)
+    l_ci.grid(row = 0, column = 3)
+    l_st.grid(row = 0, column = 4)
+
+
+    iteration = 1
+    for e in entries:
+        #   Skip the entry if it does not contain the data.
+        if(
+            search_word == "" or
+            (search_by == "name" and search_word in e.name) or
+            (search_by == "surname" and search_word in e.surname) or
+            (search_by == "telephone" and search_word in e.telephone) or
+            (search_by == "city" and search_word in e.city) or
+            (search_by == "street" and search_word in e.street)
+            ):
+           
+            l_name = create_widget(mylist, tk.Label, text = e.name, font = "20")
+            l_surname = create_widget(mylist, tk.Label, text = e.surname, font = "20")
+            l_number = create_widget(mylist, tk.Label, text = e.telephone, font = "20")
+            l_city= create_widget(mylist, tk.Label, text = e.city, font = "20")
+            l_street= create_widget(mylist, tk.Label, text = e.street, font = "20")
+            l_name.grid(row = iteration, column = 0) 
+            l_surname.grid(row = iteration, column = 1)
+            l_number.grid(row = iteration, column = 2)
+            l_city.grid(row = iteration, column = 3)
+            l_street.grid(row = iteration, column = 4)
+            iteration+=1
+
+
+
 # Window initialization
 root = create_widget(None, tk.Tk)
 root.geometry('600x400')
@@ -38,12 +81,12 @@ frame = create_widget(root, tk.Frame, width = 580)
 search_var = tk.StringVar()
 
 def search(*args):
-    print(search_var.get())
+    update_list(combo_var.get(), search_var.get())
 
 e_search = create_widget(frame, tk.Entry, textvariable=search_var, width = 40)
 e_search.pack(side = tk.LEFT)
 
-b_search = create_widget(frame, tk.Button, text = "Search", command = search)
+b_search = create_widget(frame, tk.Button, text = "Search", font = "20", command = search)
 b_search.pack(side = tk.LEFT)
 
 l_by = create_widget(frame, tk.Label, text = "by:", font = "20")
@@ -64,42 +107,13 @@ b_add.pack()
 scroll_bar = create_widget(root, tk.Scrollbar)
 scroll_bar.pack(side=tk.RIGHT, fill = tk.Y)
 
-#mylist = create_widget(root, tk.Listbox, yscrollcommand=scroll_bar.set, width = 580, bg="lightgrey", font = "20")
-
-#one = Entry("A", "B", "1", "C", "D")
-#mylist.insert(tk.END, one.getStr()) 
-
+## Initiate the entry table
 mylist = create_widget(root, tk.Frame, width = 580)
- 
-l_na= create_widget(mylist, tk.Label, text = "Name", font = "20")
-l_su= create_widget(mylist, tk.Label, text = "Surname", font = "20")
-l_nu= create_widget(mylist, tk.Label, text = "Number", font = "20")
-l_ci= create_widget(mylist, tk.Label, text = "City", font = "20")
-l_st= create_widget(mylist, tk.Label, text = "Street", font = "20")
-l_na.grid(row = 0, column = 0) 
-l_su.grid(row = 0, column = 1)
-l_nu.grid(row = 0, column = 2)
-l_ci.grid(row = 0, column = 3)
-l_st.grid(row = 0, column = 4)
 
+### Add entries to the table
+search()
 
-iteration = 1
-for e in entries:
-    l_name = create_widget(mylist, tk.Label, text = e.name, font = "20")
-    l_surname = create_widget(mylist, tk.Label, text = e.surname, font = "20")
-    l_number = create_widget(mylist, tk.Label, text = e.telephone, font = "20")
-    l_city= create_widget(mylist, tk.Label, text = e.city, font = "20")
-    l_street= create_widget(mylist, tk.Label, text = e.street, font = "20")
-    l_name.grid(row = iteration, column = 0) 
-    l_surname.grid(row = iteration, column = 1)
-    l_number.grid(row = iteration, column = 2)
-    l_city.grid(row = iteration, column = 3)
-    l_street.grid(row = iteration, column = 4)
-    iteration+=1
-
-#mylist.pack(side = tk.LEFT, fill = tk.BOTH)
 mylist.pack()
-
-#scroll_bar.config(command = mylist.yview)
+## Entry table end
 
 root.mainloop()
