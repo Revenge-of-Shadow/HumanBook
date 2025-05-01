@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import json
 
 
 class Entry:
@@ -10,13 +11,15 @@ class Entry:
         self.city = city
         self.street = street
 
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent = 2)
 
 
 def create_widget(parent, widget_type, **options):
     return widget_type(parent, **options)
 
 
-
+json_filename = "entries.json"
 entries = [
     Entry("A", "B", "1", "C", "D"),
     Entry("Andrew", "Bohan", "141351234", "Detroit", "Piquette avenue")
@@ -39,11 +42,17 @@ def add_action():
     sv_st = tk.StringVar()
 
     def addition():
+        ## Checking for a duplicate
         person = Entry(sv_na.get(), sv_su.get(), sv_nu.get(), sv_ci.get(), sv_st.get())
         if(entries_contains(person)): 
             return
+        ## Updating the table
         entries.append(person) 
         search()
+        ## Writing to a file.
+        with open(json_filename, "w") as file:
+            for i in entries:
+                file.write(f"{i.toJSON()}\n")
         w_add.destroy()
 
     ## Elements
