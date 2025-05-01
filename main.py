@@ -10,8 +10,6 @@ class Entry:
         self.city = city
         self.street = street
 
-    def getStr(self):
-        return self.name+"  |  "+self.surname+"  |  "+self.telephone+"  |  "+self.city+"  |  "+self.street
 
 
 def create_widget(parent, widget_type, **options):
@@ -24,7 +22,11 @@ entries = [
     Entry("Andrew", "Bohan", "141351234", "Detroit", "Piquette avenue")
 ]
 
-
+def entries_contains(e):
+    for i in entries:
+        if(i.name == e.name and i.surname == e.surname):
+           return True
+    return False
 
 # Following function initiates a window to add records.
 def add_action():
@@ -37,7 +39,10 @@ def add_action():
     sv_st = tk.StringVar()
 
     def addition():
-        entries.append(Entry(sv_na.get(), sv_su.get(), sv_nu.get(), sv_ci.get(), sv_st.get())) 
+        person = Entry(sv_na.get(), sv_su.get(), sv_nu.get(), sv_ci.get(), sv_st.get())
+        if(entries_contains(person)): 
+            return
+        entries.append(person) 
         search()
         w_add.destroy()
 
