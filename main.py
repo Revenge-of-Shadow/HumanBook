@@ -70,7 +70,7 @@ def add_action():
     e_ci.grid(row = 1, column = 3)
     e_st.grid(row = 1, column = 4)
     b_ad = create_widget(f_table, tk.Button, text = "Add", font = "20", command = addition)
-    b_ad.grid(row = 2, column = 2)
+    b_ad.grid(row = 2, column = 0, columnspan = 5, sticky = tk.W+tk.E)
 
 
     f_table.pack(expand = True)
@@ -121,6 +121,8 @@ def update_list(search_by, search_word):
             l_city.grid(row = iteration, column = 3)
             l_street.grid(row = iteration, column = 4)
             iteration+=1
+    l_found = create_widget(mylist, tk.Label, text = f"Found: {iteration-1}", font = "20", bg = "white")
+    l_found.grid(row = iteration, column = 0, columnspan = 5, sticky = tk.W+tk.E)
 
 
 
