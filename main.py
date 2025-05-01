@@ -25,6 +25,57 @@ entries = [
 ]
 
 
+
+# Following function initiates a window to add records.
+def add_action():
+    w_add = tk.Toplevel()
+    w_add.geometry("800x100")
+    sv_na = tk.StringVar()
+    sv_su = tk.StringVar()
+    sv_nu = tk.StringVar()
+    sv_ci = tk.StringVar()
+    sv_st = tk.StringVar()
+
+    def addition():
+        entries.append(Entry(sv_na.get(), sv_su.get(), sv_nu.get(), sv_ci.get(), sv_st.get())) 
+        search()
+        w_add.destroy()
+
+    ## Elements
+    f_table = create_widget(w_add, tk.Frame, width = 500)
+
+    l_na= create_widget(f_table, tk.Label, text = "Name", font = "20")
+    l_su= create_widget(f_table, tk.Label, text = "Surname", font = "20")
+    l_nu= create_widget(f_table, tk.Label, text = "Number", font = "20")
+    l_ci= create_widget(f_table, tk.Label, text = "City", font = "20")
+    l_st= create_widget(f_table, tk.Label, text = "Street", font = "20")
+    l_na.grid(row = 0, column = 0) 
+    l_su.grid(row = 0, column = 1)
+    l_nu.grid(row = 0, column = 2)
+    l_ci.grid(row = 0, column = 3)
+    l_st.grid(row = 0, column = 4)
+    e_na = create_widget(f_table, tk.Entry, textvariable = sv_na)
+    e_su = create_widget(f_table, tk.Entry, textvariable = sv_su)
+    e_nu = create_widget(f_table, tk.Entry, textvariable = sv_nu)
+    e_ci = create_widget(f_table, tk.Entry, textvariable = sv_ci)
+    e_st = create_widget(f_table, tk.Entry, textvariable = sv_st)
+    e_na.grid(row = 1, column = 0) 
+    e_su.grid(row = 1, column = 1)
+    e_nu.grid(row = 1, column = 2)
+    e_ci.grid(row = 1, column = 3)
+    e_st.grid(row = 1, column = 4)
+    b_ad = create_widget(f_table, tk.Button, text = "Add", font = "20", command = addition)
+    b_ad.grid(row = 2, column = 2)
+
+
+    f_table.pack(expand = True)
+    ## Elements end
+
+    w_add.title("")
+    w_add.mainloop()
+
+
+
 def update_list(search_by, search_word):
  
     for child in mylist.winfo_children():
@@ -101,7 +152,7 @@ cb_search.pack(side = tk.LEFT, expand = True)
 frame.pack()
 ## Search block end
 
-b_add = create_widget(root, tk.Button, text = "Add", width = 580)
+b_add = create_widget(root, tk.Button, text = "Add", width = 580, command = add_action)
 b_add.pack()
 
 scroll_bar = create_widget(root, tk.Scrollbar)
