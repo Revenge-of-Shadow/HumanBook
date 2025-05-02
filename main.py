@@ -11,8 +11,12 @@ class Entry:
         self.city = city
         self.street = street
 
+    def fromJSON(self, json_str):
+        self.__dict__ = json.loads(json_str)
+
+
     def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent = 2)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent = 0)
 
 
 def create_widget(parent, widget_type, **options):
@@ -21,8 +25,6 @@ def create_widget(parent, widget_type, **options):
 
 json_filename = "entries.json"
 entries = [
-    Entry("A", "B", "1", "C", "D"),
-    Entry("Andrew", "Bohan", "141351234", "Detroit", "Piquette avenue")
 ]
 
 def entries_contains(e):
@@ -48,12 +50,14 @@ def add_action():
             return
         ## Updating the table
         entries.append(person) 
-        search()
         ## Writing to a file.
         with open(json_filename, "w") as file:
             for i in entries:
-                file.write(f"{i.toJSON()}\n")
+                file.write(f"{i.toJSON()}|")
+            file.write("\b")
         w_add.destroy()
+        ## Visual update
+        search()
 
     ## Elements
     f_table = create_widget(w_add, tk.Frame, width = 500)
@@ -106,32 +110,47 @@ def update_list(search_by, search_word):
     l_ci.grid(row = 0, column = 3)
     l_st.grid(row = 0, column = 4)
 
+    try:
+        with open(json_filename, "r") as file:
+            lst = file.read().replace('\n', ' ').split("|")
+            lst.pop()
 
-    iteration = 1
-    for e in entries:
-        #   Skip the entry if it does not contain the data.
-        if(
-            search_word == "" or
-            (search_by == "name" and search_word in e.name) or
-            (search_by == "surname" and search_word in e.surname) or
-            (search_by == "telephone" and search_word in e.telephone) or
-            (search_by == "city" and search_word in e.city) or
-            (search_by == "street" and search_word in e.street)
-            ):
-           
-            l_name = create_widget(mylist, tk.Label, text = e.name, font = "20")
-            l_surname = create_widget(mylist, tk.Label, text = e.surname, font = "20")
-            l_number = create_widget(mylist, tk.Label, text = e.telephone, font = "20")
-            l_city= create_widget(mylist, tk.Label, text = e.city, font = "20")
-            l_street= create_widget(mylist, tk.Label, text = e.street, font = "20")
-            l_name.grid(row = iteration, column = 0) 
-            l_surname.grid(row = iteration, column = 1)
-            l_number.grid(row = iteration, column = 2)
-            l_city.grid(row = iteration, column = 3)
-            l_street.grid(row = iteration, column = 4)
-            iteration+=1
-    l_found = create_widget(mylist, tk.Label, text = f"Found: {iteration-1}", font = "20", bg = "white")
-    l_found.grid(row = iteration, column = 0, columnspan = 5, sticky = tk.W+tk.E)
+            del entries[:]
+            for i in lst:
+                e = Entry("", "", "", "", "")
+                e.fromJSON(i)
+                entries.append(e)
+
+    except FileNotFoundError:
+        print()
+
+    finally:
+
+        iteration = 1
+        for e in entries:
+            #   Skip the entry if it does not contain the data.
+            if(
+                search_word == "" or
+                (search_by == "name" and search_word in e.name) or
+                (search_by == "surname" and search_word in e.surname) or
+                (search_by == "telephone" and search_word in e.telephone) or
+                (search_by == "city" and search_word in e.city) or
+                (search_by == "street" and search_word in e.street)
+                ):
+               
+                l_name = create_widget(mylist, tk.Label, text = e.name, font = "20")
+                l_surname = create_widget(mylist, tk.Label, text = e.surname, font = "20")
+                l_number = create_widget(mylist, tk.Label, text = e.telephone, font = "20")
+                l_city= create_widget(mylist, tk.Label, text = e.city, font = "20")
+                l_street= create_widget(mylist, tk.Label, text = e.street, font = "20")
+                l_name.grid(row = iteration, column = 0) 
+                l_surname.grid(row = iteration, column = 1)
+                l_number.grid(row = iteration, column = 2)
+                l_city.grid(row = iteration, column = 3)
+                l_street.grid(row = iteration, column = 4)
+                iteration+=1
+        l_found = create_widget(mylist, tk.Label, text = f"Found: {iteration-1}", font = "20", bg = "white")
+        l_found.grid(row = iteration, column = 0, columnspan = 5, sticky = tk.W+tk.E)
 
 
 
