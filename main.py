@@ -29,11 +29,21 @@ json_filename = "entries.json"
 entries = [
 ]
 
+
+
 def entries_contains(e):
     for i in entries:
         if(i.name == e.name and i.surname == e.surname):
            return True
     return False
+
+
+
+def write_to_json():
+    with open(json_filename, "w") as file:
+            json.dump(entries, file, default=obj_dict)
+
+
 
 # Following function initiates a window to add records.
 def add_action():
@@ -53,16 +63,8 @@ def add_action():
         ## Updating the table
         entries.append(person) 
         ## Writing to a file.
-        """
-        with open(json_filename, "w") as file:
-            file.write("{\n")
-            for i in entries:
-                file.write(f"{i.toJSON()},\n")
-            file.write("\b\b\n}")
-            """
-        with open(json_filename, "w") as file:
-            json.dump(entries, file, default=obj_dict)
-
+        write_to_json() 
+        ## Closing the dialog window
         w_add.destroy()
         ## Visual update
         search()
@@ -93,7 +95,6 @@ def add_action():
     b_ad = create_widget(f_table, tk.Button, text = "Add", font = "20", command = addition)
     b_ad.grid(row = 2, column = 0, columnspan = 5, sticky = tk.W+tk.E)
 
-
     f_table.pack(expand = True)
     ## Elements end
 
@@ -102,7 +103,12 @@ def add_action():
 
 
 
-def update_list(search_by, search_word):
+def del_entry(index):
+    del entries[index]
+    write_to_json()
+    update_list()
+
+def update_list(search_by="", search_word=""):
  
     for child in mylist.winfo_children():
         child.destroy()
@@ -124,11 +130,11 @@ def update_list(search_by, search_word):
 
             del entries[:]
             for i in lst:
-                print(i)
                 e = Entry(i['name'], i['surname'], i['telephone'], i['city'], i['street'])
                 entries.append(e)
 
     except FileNotFoundError:
+        #  Does not matter, list can be empty.
         print()
 
     finally:
@@ -155,6 +161,12 @@ def update_list(search_by, search_word):
                 l_number.grid(row = iteration, column = 2)
                 l_city.grid(row = iteration, column = 3)
                 l_street.grid(row = iteration, column = 4)
+                
+
+                b_del = create_widget(mylist, tk.Button, text = "Delete", font = "20" )
+                b_del.bind("<Button>", lambda event, iteration=iteration:del_entry(iteration-1))
+                b_del.grid(row = iteration, column = 5)
+
                 iteration+=1
         l_found = create_widget(mylist, tk.Label, text = f"Found: {iteration-1}", font = "20", bg = "white")
         l_found.grid(row = iteration, column = 0, columnspan = 5, sticky = tk.W+tk.E)
