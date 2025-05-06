@@ -18,6 +18,8 @@ class Entry:
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent = 0)
 
+def obj_dict(obj):
+    return obj.__dict__
 
 def create_widget(parent, widget_type, **options):
     return widget_type(parent, **options)
@@ -51,10 +53,16 @@ def add_action():
         ## Updating the table
         entries.append(person) 
         ## Writing to a file.
+        """
         with open(json_filename, "w") as file:
+            file.write("{\n")
             for i in entries:
-                file.write(f"{i.toJSON()}|")
-            file.write("\b")
+                file.write(f"{i.toJSON()},\n")
+            file.write("\b\b\n}")
+            """
+        with open(json_filename, "w") as file:
+            json.dump(entries, file, default=obj_dict)
+
         w_add.destroy()
         ## Visual update
         search()
@@ -112,13 +120,12 @@ def update_list(search_by, search_word):
 
     try:
         with open(json_filename, "r") as file:
-            lst = file.read().replace('\n', ' ').split("|")
-            lst.pop()
+            lst = json.load(file)
 
             del entries[:]
             for i in lst:
-                e = Entry("", "", "", "", "")
-                e.fromJSON(i)
+                print(i)
+                e = Entry(i['name'], i['surname'], i['telephone'], i['city'], i['street'])
                 entries.append(e)
 
     except FileNotFoundError:
