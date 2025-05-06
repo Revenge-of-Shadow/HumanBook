@@ -11,12 +11,7 @@ class Entry:
         self.city = city
         self.street = street
 
-    def fromJSON(self, json_str):
-        self.__dict__ = json.loads(json_str)
 
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=False, indent = 0)
 
 def obj_dict(obj):
     return obj.__dict__
@@ -26,8 +21,7 @@ def create_widget(parent, widget_type, **options):
 
 
 json_filename = "entries.json"
-entries = [
-]
+entries = []
 
 
 
@@ -59,15 +53,20 @@ def add_action():
         ## Checking for a duplicate
         person = Entry(sv_na.get(), sv_su.get(), sv_nu.get(), sv_ci.get(), sv_st.get())
         if(entries_contains(person)): 
-            return
-        ## Updating the table
-        entries.append(person) 
-        ## Writing to a file.
-        write_to_json() 
-        ## Closing the dialog window
-        w_add.destroy()
-        ## Visual update
-        search()
+            w_err = tk.Toplevel()
+            l_err = create_widget(w_err, tk.Label, text = "A person with these name and surmane already exists.", font = "20")
+            l_err.pack()
+            w_err.title("Error.")
+            w_err.mainloop()
+        else:
+            ## Updating the table
+            entries.append(person) 
+            ## Writing to a file.
+            write_to_json() 
+            ## Visual update
+            search()
+            ## Closing the dialog window
+            w_add.destroy()
 
     ## Elements
     f_table = create_widget(w_add, tk.Frame, width = 500)
@@ -135,7 +134,7 @@ def update_list(search_by="", search_word=""):
 
     except FileNotFoundError:
         #  Does not matter, list can be empty.
-        print()
+        pass
 
     finally:
 
