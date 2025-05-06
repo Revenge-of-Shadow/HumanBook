@@ -208,16 +208,22 @@ frame.pack()
 b_add = create_widget(root, tk.Button, text = "Add", width = 580, command = add_action)
 b_add.pack()
 
-scroll_bar = create_widget(root, tk.Scrollbar)
+canvas = create_widget(root, tk.Canvas)
+
+scroll_bar = create_widget(root, tk.Scrollbar, command = canvas.yview)
+canvas.configure(yscrollcommand=scroll_bar.set)
+
 scroll_bar.pack(side=tk.RIGHT, fill = tk.Y)
 
 ## Initiate the entry table
-mylist = create_widget(root, tk.Frame, width = 580)
-
+mylist = create_widget(canvas, tk.Frame, width = 580)
+canvas.create_window((0,0), window = mylist, anchor = 'nw')
 ### Add entries to the table
 search()
+mylist.update_idletasks()   
+canvas.configure(scrollregion=canvas.bbox('all'))
+canvas.pack(side = tk.LEFT, fill=tk.BOTH, expand=True)
 
-mylist.pack()
 ## Entry table end
 
 root.mainloop()
